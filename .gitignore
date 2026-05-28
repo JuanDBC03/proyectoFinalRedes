@@ -1,0 +1,27 @@
+# Entornos Virtuales de Python
+venv/
+env/
+.venv/
+
+# Variables de Entorno (Credenciales y secretos)
+.env
+.env.*
+
+# Caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos pesados o temporales de Docker
+images.tar
+nginx_v4.tar
+*.tar
+
+# Archivos de SO
+.DS_Store
+Thumbs.db
+
+# Logs y bases de datos locales
+*.log
+mongo_data/

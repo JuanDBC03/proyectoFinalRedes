@@ -1,0 +1,25 @@
+services:
+  manager:
+    image: docker:dind
+    privileged: true
+    container_name: manager
+    hostname: manager
+    command: ["--registry-mirror=https://mirror.gcr.io"]
+    ports:
+      - "80:80" 
+    volumes:
+      - ./docker-compose.yml:/docker-compose.yml 
+
+  worker1:
+    image: docker:dind
+    privileged: true
+    container_name: worker1
+    hostname: worker1
+    command: ["--registry-mirror=https://mirror.gcr.io"]
+
+  worker2:
+    image: docker:dind
+    privileged: true
+    container_name: worker2
+    hostname: worker2
+    command: ["--registry-mirror=https://mirror.gcr.io"]

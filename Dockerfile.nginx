@@ -1,0 +1,5 @@
+FROM nginx:alpine
+# Copiamos tu archivo de configuración dentro de la imagen
+COPY ./nginx.conf /etc/nginx/nginx.conf
+# Copiamos tu carpeta del frontend completa
+COPY ./Frontend /usr/share/nginx/html

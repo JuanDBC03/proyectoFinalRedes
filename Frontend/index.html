@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - Universidad</title>
+    <style>
+        /* Diseño inspirado en Microsoft / OneDrive */
+        body { 
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; 
+            background-color: #f3f2f1; /* Gris claro corporativo */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .login-card { 
+            background-color: white; 
+            padding: 44px; 
+            border-radius: 2px; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2); 
+            width: 340px; 
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #323130;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo img {
+            width: 32px;
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1b1b1b;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+        input { 
+            width: 100%; 
+            padding: 8px 0; 
+            margin: 12px 0; 
+            border: none;
+            border-bottom: 1px solid #605e5c; 
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            border-bottom: 2px solid #0078d4; /* Azul Microsoft */
+            padding-bottom: 7px;
+        }
+        input::placeholder {
+            color: #605e5c;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+        button { 
+            background-color: #0078d4; 
+            color: white; 
+            border: none; 
+            padding: 10px 32px; 
+            border-radius: 2px; 
+            cursor: pointer; 
+            font-size: 15px; 
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        button:hover { 
+            background-color: #106ebe; 
+        }
+        #mensaje { 
+            margin-top: 20px; 
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="logo">
+            <svg viewBox="0 0 64 64" width="32" height="32">
+                <path fill="#0078d4" d="M46.7,21.5c-0.8-8.7-8.1-15.5-17.1-15.5c-7.3,0-13.6,4.5-16.1,11c-0.5-0.1-1-0.1-1.5-0.1C5.4,16.9,0,22.3,0,28.9 c0,6.6,5.4,12,12,12h34.6c9.6,0,17.4-7.8,17.4-17.4C64,24.8,56.3,21.5,46.7,21.5z"></path>
+            </svg>
+            Universidad
+        </div>
+        <h2>Iniciar sesión</h2>
+        
+        <input type="email" id="email" placeholder="Correo electrónico, teléfono o Skype" value="docente1@universidad.edu">
+        <input type="password" id="password" placeholder="Contraseña" value="docente123">
+        
+        <div class="buttons-container">
+            <button onclick="hacerLogin()">Siguiente</button>
+        </div>
+        
+        <p id="mensaje"></p>
+    </div>
+
+    <script>
+        async function hacerLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const mensajeDiv = document.getElementById('mensaje');
+
+            mensajeDiv.innerText = "Iniciando sesión...";
+            mensajeDiv.style.color = "#605e5c";
+
+            try {
+                // 1. Petición a tu API Gateway (Nginx)
+                const respuesta = await fetch("http://localhost/api/v1/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        "email": email,
+                        "password": password
+                    })
+                });
+
+                if (!respuesta.ok) {
+                    const errorText = await respuesta.text();
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        throw new Error(errorJson.detail || "Credenciales inválidas");
+                    } catch (e) {
+                        throw new Error(`Error del servidor (${respuesta.status}). Revisa que Uvicorn esté corriendo.`);
+                    }
+                }
+
+                const data = await respuesta.json();
+                const token = data.access_token;
+                
+                // Guardamos el token
+                localStorage.setItem("token_jwt", token);
+
+                // 2. Decodificamos el JWT manualmente para sacar el ID ("sub")
+                const payloadBase64 = token.split('.')[1];
+                const payloadDecodificado = JSON.parse(atob(payloadBase64));
+                const usuarioId = payloadDecodificado.sub;
+
+                // 3. Consultamos el Rol al Usuarios Service
+                const rolRespuesta = await fetch(`http://localhost/api/v1/usuarios/${usuarioId}/rol`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                
+                if (!rolRespuesta.ok) throw new Error("No se pudo obtener el rol del usuario");
+                const rolData = await rolRespuesta.json();
+                
+                // Guardamos el rol
+                localStorage.setItem("usuario_rol", rolData.rol);
+
+                mensajeDiv.style.color = "#107c10";
+                mensajeDiv.innerText = "¡Inicio de sesión exitoso! Preparando tu panel...";
+                
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+
+            } catch (error) {
+                mensajeDiv.style.color = "#a4262c";
+                mensajeDiv.innerText = error.message;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 1
+ 
+
+  auth_service:
+    image: bigwelker/auth_service:latest
+    build: ./auth_service
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+      - ALLOWED_ORIGINS=["http://localhost"]
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 2 
+      restart_policy:
+        condition: on-failure
+
+  usuarios_service:
+    image: bigwelker/usuarios_service:latest
+    build: ./usuarios_service
+    ports:
+      - "8002:8002"
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+      - ALLOWED_ORIGINS=["http://localhost"]
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 2
+
+
+      restart_policy:
+        condition: on-failure
+
+  eventos_service:
+    image: bigwelker/eventos_service:latest
+    build: ./eventos_service
+    ports:
+      - "8003:8003"
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+      - ALLOWED_ORIGINS=["http://localhost"]
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 2
+
+
+      restart_policy:
+        condition: on-failure
+
+  evaluaciones_service:
+    image: bigwelker/evaluaciones_service:latest
+    build: ./evaluaciones_service
+    ports:
+      - "8004:8004"
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+      - ALLOWED_ORIGINS=["http://localhost"]
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 2
+
+
+      restart_policy:
+        condition: on-failure
+
+  instalaciones_service:
+    image: bigwelker/instalaciones_service:latest
+    build: ./instalaciones_service
+    ports:
+      - "8005:8005"
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+      - ALLOWED_ORIGINS=["http://localhost"]
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 2
+
+
+      restart_policy:
+        condition: on-failure
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025" 
+      - "8025:8025" 
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 1
+
+  notificaciones_service:
+    image: bigwelker/notificaciones_service:latest
+    build: ./notificaciones_service
+    ports:
+      - "8006:8006"
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+      - SMTP_SERVER=mailhog
+      - SMTP_PORT=1025
+      - ALLOWED_ORIGINS=["http://localhost"]
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 2
+
+
+      restart_policy:
+        condition: on-failure
+
+  nginx:
+    image: bigwelker/api_gateway:v4
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx 
+    ports:
+      - "80:80"
+    networks:
+      - red_universidad
+    configs:
+      - source: nginx_config
+        target: /etc/nginx/nginx.conf
+    deploy:
+      replicas: 2
+
+
+      restart_policy:
+        condition: on-failure
+
+  analytics_service:
+    image: my_analytics_service:latest
+    build: ./analytics_service
+    ports:
+      - "8007:8007"
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 1
+
+      restart_policy:
+        condition: on-failure
+
+  whoami:
+    image: traefik/whoami
+    ports:
+      - "8000:80"
+    networks:
+      - red_universidad
+    deploy:
+      replicas: 4
+
+volumes:
+  mongo_data:
+
+configs:
+  nginx_config:
+    file: ./nginx.conf
+
+networks:
+  red_universidad:
+    driver: overlay
+    attachable: true
+
+
+

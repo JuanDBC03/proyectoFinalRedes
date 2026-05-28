@@ -1,0 +1,7 @@
+fastapi==0.116.0
+uvicorn==0.35.0
+motor==3.7.1
+beanie==1.30.0
+pydantic-settings==2.10.1
+python-jose==3.5.0
+httpx==0.28.1

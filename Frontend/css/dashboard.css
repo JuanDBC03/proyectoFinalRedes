@@ -1,0 +1,456 @@
+/* ==========================================
+   1. VARIABLES OFICIALES (Fluent Design / OneDrive)
+   ========================================== */
+:root {
+      /* Tipografía */
+      --fontFamilyBase: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
+      --fontSizeBase200: 12px;
+      --fontSizeBase300: 14px;
+      --fontSizeBase400: 16px;
+      --fontSizeBase500: 20px;
+      
+      /* Espaciados y Bordes */
+      --spacingHorizontalL: 16px;
+      --borderRadiusMedium: 4px;
+      --borderRadiusLarge: 6px;
+      --borderRadiusXLarge: 8px;
+      --borderRadius2XLarge: 12px;
+      
+      /* Paleta de Colores Microsoft */
+      --ms-palette-themePrimary: #0078d4;
+      --ms-palette-themeDarkAlt: #106ebe;
+      --ms-palette-white: #ffffff;
+      --ms-palette-neutralLighter: #f3f2f1;
+      --ms-palette-neutralLight: #edebe9;
+      --ms-palette-neutralPrimary: #323130;
+      --ms-palette-neutralSecondary: #605e5c;
+      
+      /* Sombras Fluent */
+      --shadow-card: 0 1.6px 3.6px 0 rgba(0,0,0,0.132), 0 0.3px 0.9px 0 rgba(0,0,0,0.108);
+      --shadow-hover: 0 6.4px 14.4px 0 rgba(0,0,0,0.132), 0 1.2px 3.6px 0 rgba(0,0,0,0.108);
+   }
+
+   body { 
+      margin: 0; 
+      font-family: var(--fontFamilyBase); 
+      background-color: var(--ms-palette-neutralLighter); 
+      color: var(--ms-palette-neutralPrimary);
+      display: flex; 
+      flex-direction: column; 
+      height: 100vh; 
+      overflow: hidden; 
+   }
+
+   /* ==========================================
+      2. BARRA SUPERIOR (Header)
+      ========================================== */
+   .topbar { 
+      background-color: var(--ms-palette-themePrimary); 
+      color: var(--ms-palette-white); 
+      height: 52px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 0 24px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+      z-index: 10; 
+   }
+
+   .topbar .logo { 
+      font-size: 16px; 
+      font-weight: 600; 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      letter-spacing: 0.5px;
+   }
+
+   .topbar .search-bar { 
+      background-color: rgba(255,255,255,0.15); 
+      border-radius: var(--borderRadiusMedium); 
+      padding: 6px 16px; 
+      width: 450px; 
+      display: flex; 
+      align-items: center; 
+      transition: background-color 0.2s;
+   }
+
+   .topbar .search-bar:focus-within {
+      background-color: var(--ms-palette-white);
+   }
+
+   .topbar .search-bar input { 
+      border: none; 
+      background: transparent; 
+      width: 100%; 
+      outline: none; 
+      color: var(--ms-palette-white);
+   }
+
+   .topbar .search-bar:focus-within input {
+      color: var(--ms-palette-neutralPrimary);
+   }
+
+   .topbar .search-bar input::placeholder { color: rgba(255, 255, 255, 0.7); }
+   .topbar .search-bar:focus-within input::placeholder { color: var(--ms-palette-neutralSecondary); }
+
+   .topbar .user-profile { 
+      font-size: var(--fontSizeBase300); 
+      display: flex; 
+      align-items: center; 
+      gap: 16px; 
+   }
+
+   .logout-btn { 
+      background-color: transparent; 
+      color: var(--ms-palette-white); 
+      border: 1px solid rgba(255,255,255,0.5); 
+      padding: 6px 14px; 
+      border-radius: var(--borderRadiusMedium); 
+      cursor: pointer; 
+      font-weight: 500;
+      transition: all 0.2s;
+   }
+
+   .logout-btn:hover { 
+      background-color: var(--ms-palette-white); 
+      color: var(--ms-palette-themePrimary);
+   }
+
+   /* ==========================================
+      3. CONTENEDOR PRINCIPAL Y SIDEBAR
+      ========================================== */
+   .main-container { 
+      display: flex; 
+      flex: 1; 
+      overflow: hidden; 
+   }
+
+   .sidebar { 
+      width: 240px; 
+      background-color: var(--ms-palette-neutralLighter); 
+      padding: 24px 12px; 
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+   }
+
+   .nav-item { 
+      padding: 10px 16px; 
+      color: var(--ms-palette-neutralPrimary); 
+      text-decoration: none; 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      font-size: var(--fontSizeBase300); 
+      cursor: pointer; 
+      border-radius: var(--borderRadiusMedium);
+      transition: all 0.2s ease; 
+   }
+
+   .nav-item:hover { background-color: var(--ms-palette-neutralLight); }
+   .nav-item.active { background-color: var(--ms-palette-white); font-weight: 600; box-shadow: var(--shadow-card); }
+
+   /* ==========================================
+      4. SCROLLBAR ESTILO ONEDRIVE
+      ========================================== */
+   .OD3Scrollbar::-webkit-scrollbar {
+      width: 14px;
+      height: 14px;
+   }
+   .OD3Scrollbar::-webkit-scrollbar-button { display: none; }
+   .OD3Scrollbar::-webkit-scrollbar-corner { background: transparent; }
+   .OD3Scrollbar::-webkit-scrollbar-thumb {
+      background-clip: content-box;
+      border-radius: var(--borderRadiusXLarge);
+      border: 4px solid transparent;
+      background-color: var(--ms-palette-neutralSecondary);
+   }
+   .OD3Scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: var(--ms-palette-neutralPrimary);
+   }
+
+   /* ==========================================
+      5. ÁREA DE CONTENIDO Y TIRA DE RECOMENDADOS
+      ========================================== */
+   .content-area { 
+      flex: 1; 
+      background-color: var(--ms-palette-white); 
+      margin: 8px 8px 8px 0; 
+      border-radius: var(--borderRadiusXLarge); 
+      box-shadow: var(--shadow-card); 
+      padding: 32px; 
+      overflow-y: auto; 
+   }
+
+   .content-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 24px; 
+   }
+
+   .content-header h1 { 
+      margin: 0; 
+      font-size: 24px; 
+      font-weight: 600; 
+   }
+
+   .btn-primary { 
+      background-color: var(--ms-palette-themePrimary); 
+      color: var(--ms-palette-white); 
+      border: none; 
+      padding: 8px 20px; 
+      border-radius: var(--borderRadiusMedium); 
+      cursor: pointer; 
+      font-size: var(--fontSizeBase300); 
+      font-weight: 600;
+      transition: background-color 0.2s, transform 0.1s; 
+   }
+   .btn-primary:hover { background-color: var(--ms-palette-themeDarkAlt); }
+   .btn-primary:active { transform: scale(0.98); }
+
+   .recommendedStripResizable {
+      height: 140px; 
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0 0 8px 0;
+      gap: 16px;
+      margin: 16px 0 0 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+   }
+
+   .recommendedStripResizable::-webkit-scrollbar { height: 8px; }
+   .recommendedStripResizable::-webkit-scrollbar-thumb {
+      background-color: var(--ms-palette-neutralLight);
+      border-radius: var(--borderRadiusLarge);
+   }
+
+   .recommended-card {
+      min-width: 220px;
+      height: 110px;
+      background-color: var(--ms-palette-neutralLighter);
+      border-radius: var(--borderRadiusXLarge);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+   }
+   .recommended-card:hover {
+      background-color: var(--ms-palette-white);
+      border-color: var(--ms-palette-neutralLight);
+      box-shadow: var(--shadow-card);
+   }
+   .rc-icon { font-size: 24px; color: var(--ms-palette-themePrimary); }
+   .rc-info h4 { margin: 0; font-size: var(--fontSizeBase300); font-weight: 600; }
+   .rc-info p { margin: 0; font-size: var(--fontSizeBase200); color: var(--ms-palette-neutralSecondary); }
+
+   /* ==========================================
+      6. CUADRÍCULA DE EVENTOS/USUARIOS (Tarjetas Rediseñadas)
+      ========================================== */
+   .events-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Tarjetas un poco más anchas */
+      gap: 24px; 
+   }
+
+   .event-card { 
+      background-color: var(--ms-palette-white);
+      border: 1px solid var(--ms-palette-neutralLight); 
+      border-left: 4px solid var(--ms-palette-themePrimary); /* Acento de color lateral */
+      border-radius: var(--borderRadiusMedium); 
+      padding: 24px; 
+      cursor: pointer; 
+      transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animación más fluida */
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      position: relative;
+   }
+
+   .event-card:hover { 
+      box-shadow: var(--shadow-hover); 
+      transform: translateY(-4px); 
+      border-color: transparent;
+      border-left: 4px solid var(--ms-palette-themeDarkAlt);
+   }
+
+   /* Contenedor del ícono para darle más peso visual */
+   .event-icon { 
+      font-size: 20px; 
+      color: var(--ms-palette-themePrimary); 
+      background-color: #e5f0fa; /* Fondo azul sutil */
+      width: 44px; 
+      height: 44px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      border-radius: var(--borderRadiusXLarge);
+      margin-bottom: 8px;
+   }
+
+   /* Mejora de la tipografía del título: más grosor y mejor espaciado */
+   .event-title { 
+      font-size: 18px; 
+      font-weight: 700; 
+      color: var(--ms-palette-neutralPrimary); 
+      margin: 0; 
+      line-height: 1.3; 
+      letter-spacing: -0.3px; /* Juntar sutilmente las letras le quita lo "básico" */
+   }
+
+   /* Texto secundario limpio */
+   .event-meta { 
+      font-size: var(--fontSizeBase300); 
+      color: var(--ms-palette-neutralSecondary); 
+      margin: 0; 
+      display: flex;
+      align-items: center;
+      gap: 8px;
+   }
+
+   .status-badge { 
+      display: inline-block; 
+      padding: 6px 12px; 
+      border-radius: 20px; 
+      font-size: 11px; 
+      font-weight: 700; 
+      text-transform: uppercase;
+      letter-spacing: 0.5px; /* A las mayúsculas pequeñas sí les sirve separarlas */
+      width: fit-content; 
+      margin-top: 4px;
+   }
+   .status-aprobado { background-color: #dff6dd; color: #107c10; }
+   .status-pendiente { background-color: #fff4ce; color: #797775; }
+
+   /* Separación visual de los botones de acción */
+   .action-btns { 
+      display: flex; 
+      gap: 8px; 
+      margin-top: auto; /* Empuja los botones al fondo de la tarjeta */
+      padding-top: 16px;
+      border-top: 1px dashed var(--ms-palette-neutralLight);
+   }
+
+   .action-btns button { 
+      padding: 8px 16px; 
+      font-size: var(--fontSizeBase200); 
+      border-radius: var(--borderRadiusMedium); 
+      border: none; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: background-color 0.2s;
+      background-color: var(--ms-palette-neutralLighter);
+      color: var(--ms-palette-neutralPrimary);
+   }
+
+   .action-btns button:hover { 
+      background-color: var(--ms-palette-neutralLight); 
+   }
+
+   /* ==========================================
+      7. MODALES (Glassmorphism intacto)
+      ========================================== */
+   .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 1000;
+   }
+
+   .modal-content {
+      background-color: var(--ms-palette-white); 
+      padding: 32px; 
+      border-radius: var(--borderRadius2XLarge);
+      width: 400px; 
+      box-shadow: var(--shadow-hover);
+      display: flex; flex-direction: column; gap: 16px;
+      animation: modalFadeIn 0.3s ease;
+   }
+
+   @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+   }
+
+   .modal-content h2 { margin: 0 0 8px 0; font-size: 20px; font-weight: 600; }
+
+   .modal-content input, .modal-content select, .modal-content textarea { 
+      padding: 10px 12px; 
+      border: 1px solid var(--ms-palette-neutralSecondary); 
+      border-radius: var(--borderRadiusMedium); 
+      font-family: inherit; font-size: var(--fontSizeBase300);
+      width: 100%; box-sizing: border-box; outline: none;
+      transition: border-color 0.2s;
+   }
+
+   .modal-content input:focus, .modal-content select:focus, .modal-content textarea:focus {
+      border-color: var(--ms-palette-themePrimary);
+      border-width: 2px;
+      padding: 9px 11px;
+   }
+
+   .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+
+   .btn-cancel { 
+      background: transparent; 
+      border: 1px solid var(--ms-palette-neutralSecondary); 
+      color: var(--ms-palette-neutralPrimary);
+      padding: 8px 20px; font-weight: 600; cursor: pointer; 
+      border-radius: var(--borderRadiusMedium); transition: background 0.2s;
+   }
+.btn-cancel:hover { background: var(--ms-palette-neutralLight); }
+
+/* ==========================================
+   8. NOTIFICACIONES TOAST Y CONFIRMACIONES
+   ========================================== */
+.toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 9999;
+}
+
+.toast {
+      min-width: 250px;
+      background-color: var(--ms-palette-white);
+      color: var(--ms-palette-neutralPrimary);
+      padding: 16px 20px;
+      border-radius: var(--borderRadiusLarge);
+      box-shadow: var(--shadow-hover);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: var(--fontSizeBase300);
+      font-weight: 500;
+      border-left: 4px solid var(--ms-palette-themePrimary);
+      transform: translateX(120%);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.toast.show {
+      transform: translateX(0);
+      opacity: 1;
+}
+
+.toast i { font-size: 20px; }
+
+/* Colores según el tipo de mensaje */
+.toast.success { border-left-color: #107c10; }
+.toast.success i { color: #107c10; }
+
+.toast.error { border-left-color: #d13438; }
+.toast.error i { color: #d13438; }
+
+.toast.warning { border-left-color: #ffb900; }
+.toast.warning i { color: #ffb900; }
