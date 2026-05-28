@@ -1,5 +1,5 @@
 # Creado por:
-Juan David Bedoya
+Juan David Bedoya,
 Sebastian Rojas
 
 # Sistema de Gestión Universitaria (Arquitectura de Microservicios)
